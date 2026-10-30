@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment Cover Page Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--ink:#171717;--muted:#6b7280;--line:#d9dde3;--accent:#202938}
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5f8;color:var(--ink);font-family:Inter,Arial,sans-serif}
+header{background:#17202d;color:#fff;padding:22px 5vw}
+header h1{font-size:22px;margin:0 0 5px;font-weight:700}
+header p{margin:0;color:#cbd5e1;font-size:13px}
+main{max-width:1320px;margin:28px auto;padding:0 22px;display:grid;grid-template-columns:minmax(310px,430px) minmax(420px,1fr);gap:26px;align-items:start}
+.panel{background:#fff;border:1px solid #e3e7ed;border-radius:14px;padding:23px;box-shadow:0 8px 24px #1f29370a}
+.panel h2{font-size:17px;margin:0 0 5px}
+.sub{font-size:12px;color:var(--muted);margin:0 0 20px}
+.field{margin:0 0 14px}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:6px;color:#374151}
+input,textarea{width:100%;border:1px solid #d5dae2;border-radius:8px;padding:11px 12px;font:14px Arial,sans-serif;outline:none;background:#fff}
+input:focus,textarea:focus{border-color:#64748b;box-shadow:0 0 0 3px #64748b18}
+textarea{resize:vertical;min-height:65px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+hr{border:0;border-top:1px solid #edf0f3;margin:20px 0}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+button{border:0;border-radius:8px;padding:12px 16px;font-weight:700;font-size:13px;cursor:pointer}
+.primary{background:#17202d;color:white;flex:1}
+.secondary{background:#eef1f5;color:#263244}
+button:hover{filter:brightness(.95)}
+.preview-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.preview-head h2{margin:0;font-size:17px}
+.preview-head span{font-size:11px;color:#64748b}
+.paper-wrap{background:#e8ebf0;border-radius:12px;padding:20px;display:flex;justify-content:center;overflow:auto}
+#paper{width:100%;max-width:595px;aspect-ratio:210/297;background:#fff;position:relative;box-shadow:0 5px 22px #00000020;overflow:hidden;font-family:"Times New Roman",serif;color:#111}
+.corner{position:absolute;width:24%;height:7%;background:#aaa;transform:skewX(-32deg)}
+.corner:after{content:"";position:absolute;background:#aaa;height:17%;width:38%;right:-20%;top:12%}
+.corner.top{top:-1.2%;left:-4%}
+.corner.bottom{bottom:-1.2%;right:-4%;transform:skewX(-32deg) rotate(180deg)}
+.paper-content{position:absolute;inset:13.3% 10% 12%;display:flex;flex-direction:column}
+.uni{font-size:clamp(24px,3.25vw,32px);font-weight:bold;text-align:center;white-space:nowrap;margin:0 0 3.3%}
+.assignment{font-size:clamp(22px,2.95vw,29px);font-weight:bold;text-align:center;margin:0 0 3.2%}
+.topic{font-size:clamp(16px,2.2vw,21px);font-weight:bold;text-align:center;line-height:1.55;min-height:8%;margin:0 auto;width:90%;overflow-wrap:anywhere}
+.course{margin-top:7.5%;font-size:clamp(16px,2.2vw,21px);line-height:1.9}
+.course b,.student-box b,.faculty-box b{font-weight:bold}
+.info-boxes{margin-top:13%;display:flex;flex-direction:column;gap:2.5%;align-items:flex-start}
+.student-box,.faculty-box{border:1.4px solid #555;border-radius:17px;box-shadow:0 1px 3px #0005;text-align:center;padding:3.1% 3%;font-size:clamp(16px,2.1vw,21px);line-height:1.9;background:#fff}
+.student-box{width:57%;margin-left:0}
+.faculty-box{width:57%;align-self:flex-end}
+.small-note{text-align:center;color:#64748b;font-size:11px;margin-top:12px}
+@media(max-width:850px){main{grid-template-columns:1fr;max-width:650px}.paper-wrap{padding:12px}#paper{max-width:520px}}
+@media(max-width:480px){main{padding:0 12px;margin:16px auto}.panel{padding:17px}.grid2{grid-template-columns:1fr}.paper-content{inset:13% 7% 12%}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Assignment Cover Page Generator</h1>
+  <p>Enter your details, preview your cover page, and download a print-ready PDF.</p>
+</header>
+<main>
+<section class="panel">
+  <h2>Enter your information</h2>
+  <p class="sub">Your information appears automatically in the cover preview.</p>
+  <div class="field"><label for="university">University name</label><input id="university" value="NORTHERN UNIVERSITY BANGLADESH"></div>
+  <div class="field"><label for="topic">Assignment topic</label><textarea id="topic">How Information Technology Helps bKash Become an Agile Competitor</textarea></div>
+  <div class="grid2">
+    <div class="field"><label for="course">Course title</label><input id="course" value="Management Information System"></div>
+    <div class="field"><label for="code">Course code</label><input id="code" value="CSE 4349"></div>
+  </div>
+  <hr>
+  <div class="grid2">
+    <div class="field"><label for="student">Student name</label><input id="student" value="Zarif Hasan"></div>
+    <div class="field"><label for="studentId">Student ID</label><input id="studentId" value="41230301743"></div>
+  </div>
+  <div class="field"><label for="section">Section</label><input id="section" placeholder="e.g.  D"></div>
+  <hr>
+  <div class="field"><label for="faculty">Submitted to (faculty name)</label><input id="faculty" value="Jannat Rosul Nisha"></div>
+  <div class="grid2">
+    <div class="field"><label for="designation">Designation</label><input id="designation" value="Lecturer"></div>
+    <div class="field"><label for="department">Department (optional)</label><input id="department" placeholder="e.g. CSE"></div>
+  </div>
+  <div class="field"><label for="facultyUniversity">Faculty university / institution</label><input id="facultyUniversity" value="Northern University Bangladesh"></div>
+  <div class="actions">
+    <button class="primary" id="download">Download PDF</button>
+    <button class="secondary" id="reset" type="button">Reset</button>
+  </div>
+  <p class="small-note" style="text-align:left">Tip: Long assignment topics will wrap automatically. Section is optional.</p>
+</section>
+<section class="panel">
+  <div class="preview-head"><h2>Live preview</h2><span>A4 · Portrait</span></div>
+  <div class="paper-wrap">
+    <div id="paper">
+      <div class="corner top"></div><div class="corner bottom"></div>
+      <div class="paper-content">
+        <div class="uni" id="p-university"></div>
+        <div class="assignment">Assignment On</div>
+        <div class="topic" id="p-topic"></div>
+        <div class="course">
+          <div><b>Course Title:</b> <span id="p-course"></span></div>
+          <div><b>Course Code:</b> <span id="p-code"></span></div>
+        </div>
+        <div class="info-boxes">
+          <div class="student-box">
+            <div><b>Submitted By:</b> <span id="p-student"></span></div>
+            <div><b>ID:</b> <span id="p-studentId"></span></div>
+            <div id="p-section-row" style="display:none"><b>Section:</b> <span id="p-section"></span></div>
+          </div>
+          <div class="faculty-box">
+            <div><b>Submitted To:</b> <span id="p-faculty"></span></div>
+            <div id="p-designation"></div>
+            <div id="p-department-row" style="display:none"></div>
+            <div id="p-facultyUniversity"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="small-note">Preview is scaled to fit your screen. The downloaded PDF uses full A4 dimensions.</p>
+</section>
+</main>
+<script>
+const fields=['university','topic','course','code','student','studentId','section','faculty','designation','department','facultyUniversity'];
+function val(id){return document.getElementById(id).value.trim()}
+function update(){
+  fields.forEach(id=>{
+    const target=document.getElementById('p-'+id);
+    if(target) target.textContent=val(id);
+  });
+  const sr=document.getElementById('p-section-row');
+  sr.style.display=val('section')?'block':'none';
+  const dr=document.getElementById('p-department-row');
+  dr.style.display=val('department')?'block':'none';
+  dr.textContent=val('department')?'Department of '+val('department'):'';
+}
+fields.forEach(id=>document.getElementById(id).addEventListener('input',update));
+update();
+document.getElementById('reset').addEventListener('click',()=>{
+  document.getElementById('university').value='NORTHERN UNIVERSITY BANGLADESH';
+  document.getElementById('topic').value='';
+  document.getElementById('course').value='';
+  document.getElementById('code').value='';
+  document.getElementById('student').value='';
+  document.getElementById('studentId').value='';
+  document.getElementById('section').value='';
+  document.getElementById('faculty').value='';
+  document.getElementById('designation').value='';
+  document.getElementById('department').value='';
+  document.getElementById('facultyUniversity').value='Northern University Bangladesh';
+  update();
+});
+document.getElementById('download').addEventListener('click',()=>{
+  if(!window.jspdf){alert('PDF library could not load. Check your internet connection and try again.');return}
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W=210,H=297;
+  // Decorative corner shapes, matching the reference cover.
+  pdf.setFillColor(169,169,169);
+  pdf.triangle(0,0,47,0,31,19,'F');
+  pdf.triangle(0,0,18,0,0,16,'F');
+  pdf.setFillColor(169,169,169); pdf.triangle(0,0,0,20,43,0,'F');
+  pdf.setFillColor(169,169,169); pdf.triangle(W,H,W-48,H,W-31,H-19,'F');
+  pdf.triangle(W,H,W,H-20,W-43,H,'F');
+  // Top and bottom small accent bars.
+  pdf.setFillColor(169,169,169); pdf.rect(43,5,10,4,'F'); pdf.rect(157,288,10,4,'F');
+  const center=(s,y,size,bold=true)=>{pdf.setFont('times',bold?'bold':'normal');pdf.setFontSize(size);pdf.text(String(s||''),W/2,y,{align:'center',maxWidth:174});};
+  center(val('university'),47,24);
+  center('Assignment On',59,22);
+  pdf.setFont('times','bold');pdf.setFontSize(16);
+  const topic=val('topic')||'';
+  const topicLines=pdf.splitTextToSize(topic,150);
+  pdf.text(topicLines,W/2,72,{align:'center',lineHeightFactor:1.45});
+  const topicEnd=72+(topicLines.length-1)*7;
+  pdf.setFont('times','normal');pdf.setFontSize(16);
+  pdf.setFont('times','bold');pdf.text('Course Title:',27,topicEnd+23);
+  pdf.setFont('times','normal');pdf.text(val('course'),61,topicEnd+23,{maxWidth:120});
+  pdf.setFont('times','bold');pdf.text('Course Code:',27,topicEnd+32);
+  pdf.setFont('times','normal');pdf.text(val('code'),61,topicEnd+32);
+  // Rounded information boxes, aligned like the source PDF.
+  const box=(x,y,w,h)=>{pdf.setDrawColor(70,70,70);pdf.setLineWidth(.35);pdf.roundedRect(x,y,w,h,5,5,'S');};
+  box(27,topicEnd+62,83,38);
+  box(107,topicEnd+97,88,31);
+  pdf.setFont('times','normal');pdf.setFontSize(16);
+  const centered=(s,x,y,w)=>pdf.text(String(s||''),x+w/2,y,{align:'center',maxWidth:w-8});
+  pdf.setFont('times','bold');centered('Submitted By:',27,topicEnd+72,83);
+  pdf.setFont('times','normal');centered(val('student'),27,topicEnd+79,83);
+  centered('ID: '+val('studentId'),27,topicEnd+86,83);
+  if(val('section')){pdf.setFont('times','normal');centered('Section: '+val('section'),27,topicEnd+93,83);}
+  let fy=topicEnd+107;
+  pdf.setFont('times','bold');centered('Submitted To: '+val('faculty'),107,fy,88);
+  pdf.setFont('times','normal');centered(val('designation'),107,fy+7,88);
+  if(val('department')){centered('Department of '+val('department'),107,fy+14,88);fy+=7}
+  centered(val('facultyUniversity'),107,fy+14,88);
+  pdf.save('assignment-cover-page.pdf');
+});
+</script>
+</body>
+</html>
